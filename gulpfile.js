@@ -59,6 +59,7 @@ function assetCopy() {
 
 function server() {
   browserSync({
+    open: false,
     server : {
       baseDir : 'out'
     }
