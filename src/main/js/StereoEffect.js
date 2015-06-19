@@ -7,6 +7,8 @@
  * Off-axis stereoscopic effect based on http://paulbourke.net/stereographics/stereorender/
  */
 
+var THREE = require('threejs');
+
 THREE.StereoEffect = function ( renderer ) {
 
 	// API
