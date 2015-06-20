@@ -2,6 +2,7 @@ var THREE = require('threejs');
 require('./StereoEffect');
 require('./DeviceOrientationControls');
 require('./OrbitControls');
+var keepAwake = require('./keepAwake');
 var camera, scene, renderer;
 var effect, controls;
 var element, container;
@@ -48,6 +49,7 @@ function init() {
 
     window.removeEventListener('deviceorientation', setOrientationControls, true);
   }
+
   window.addEventListener('deviceorientation', setOrientationControls, true);
 
 
@@ -63,11 +65,11 @@ function init() {
   texture.anisotropy = renderer.getMaxAnisotropy();
 
   var material = new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-    specular: 0xffffff,
-    shininess: 20,
-    shading: THREE.FlatShading,
-    map: texture
+    color : 0xffffff,
+    specular : 0xffffff,
+    shininess : 20,
+    shading : THREE.FlatShading,
+    map : texture
   });
 
   var geometry = new THREE.PlaneGeometry(1000, 1000);
@@ -120,4 +122,5 @@ function fullscreen() {
   } else if (container.webkitRequestFullscreen) {
     container.webkitRequestFullscreen();
   }
+  keepAwake.start();
 }
