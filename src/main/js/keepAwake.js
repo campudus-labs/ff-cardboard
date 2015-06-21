@@ -3,6 +3,7 @@ var level = 0;
 var stayAwakeInterval = null;
 
 function start() {
+  console.log('requesting keep awake');
   try {
     chrome.power.requestKeepAwake('display');
   } catch (e) {
@@ -24,6 +25,7 @@ function start() {
         } catch (e) {
           level++;
           console.log('no navigator.wakeLock', e);
+          createVideoElement();
         }
       }
     }
@@ -35,6 +37,15 @@ function stop() {
     lock.unlock();
     lock = null;
   }
+}
+
+function createVideoElement() {
+  var video = document.createElement('video');
+  video.id = 'keep-awake-video';
+  video.src = 'empty.avi';
+  video.autoPlay = true;
+  video.loop = true;
+  document.body.appendChild(video);
 }
 
 module.exports = {
