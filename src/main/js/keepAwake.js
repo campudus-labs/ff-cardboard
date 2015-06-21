@@ -1,9 +1,11 @@
 var lock = null;
-var level = 0;
+var level;
 var stayAwakeInterval = null;
+var video;
 
 function start() {
   console.log('requesting keep awake');
+  level = 0;
   try {
     chrome.power.requestKeepAwake('display');
   } catch (e) {
@@ -33,18 +35,35 @@ function start() {
 }
 
 function stop() {
+  if (video !== null) {
+    video.pause();
+    video.src = '';
+  }
+
   if (stayAwakeInterval !== null) {
+    clearInterval(stayAwakeInterval);
+    stayAwakeInterval = null;
+  }
+
+  if (lock !== null) {
     lock.unlock();
     lock = null;
+  }
+
+  if (level === 0) {
+    chrome.power.releaseKeepAwake();
   }
 }
 
 function createVideoElement() {
-  var video = document.createElement('video');
+  if (video === null) {
+    video = document.createElement('video');
+    document.body.appendChild(video);
+  }
   video.id = 'keep-awake-video';
-  video.src = "data:video/webm;base64,GkXfo0AgQoaBAUL3gQFC8oEEQvOBCEKCQAR3ZWJtQoeBAkKFgQIYU4BnQI0VSalmQCgq17FAAw9CQE2AQAZ3aGFtbXlXQUAGd2hhbW15RIlACECPQAAAAAAAFlSua0AxrkAu14EBY8WBAZyBACK1nEADdW5khkAFVl9WUDglhohAA1ZQOIOBAeBABrCBCLqBCB9DtnVAIueBAKNAHIEAAIAwAQCdASoIAAgAAUAmJaQAA3AA/vz0AAA=";
+  video.src =
+    'data:video/webm;base64,GkXfo0AgQoaBAUL3gQFC8oEEQvOBCEKCQAR3ZWJtQoeBAkKFgQIYU4BnQI0VSalmQCgq17FAAw9CQE2AQAZ3aGFtbXlXQUAGd2hhbW15RIlACECPQAAAAAAAFlSua0AxrkAu14EBY8WBAZyBACK1nEADdW5khkAFVl9WUDglhohAA1ZQOIOBAeBABrCBCLqBCB9DtnVAIueBAKNAHIEAAIAwAQCdASoIAAgAAUAmJaQAA3AA/vz0AAA=';
   video.loop = true;
-  document.body.appendChild(video);
   video.play();
 }
 
