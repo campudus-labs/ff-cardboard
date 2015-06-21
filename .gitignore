@@ -31,3 +31,5 @@ node_modules
 
 *.iml
 out/
+
+.DS_Store
