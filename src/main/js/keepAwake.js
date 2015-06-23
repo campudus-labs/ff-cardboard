@@ -1,7 +1,7 @@
 var lock = null;
 var level;
 var stayAwakeInterval = null;
-var video;
+var video = null;
 
 function start() {
   console.log('requesting keep awake');
