@@ -25,7 +25,7 @@ function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(90, 1, 0.001, 700);
-  camera.position.set(0, 10, 0);
+  camera.position.y = 14;
   scene.add(camera);
 
   controls = new THREE.OrbitControls(camera, element);
@@ -73,7 +73,7 @@ function init() {
     color : 0xffffff,
     specular : 0xffffff,
     shininess : 20,
-    shading : THREE.FlatShading,
+    shading : THREE.SmoothShading,
     map : texture
   });
 
@@ -82,18 +82,32 @@ function init() {
   mesh.rotation.x = -Math.PI / 2;
   scene.add(mesh);
 
+  var cylinder = addCylinder(9, 9, 3, 48, 0xfab400);
+  cylinder.position.z = 0;
+  cylinder.position.y = 1.5;
+  cylinder.position.x = 15;
+  scene.add(cylinder);
+
   //Load object model
   var loader = new THREE.OBJLoader();
   var objURL = 'models/bike/bike.obj';
   loader.load(objURL, function (object) {
     object.scale.set(0.1, 0.1, 0.1);
-    object.position.z = 10;
+    object.position.y = 3;
+    object.position.x = 15;
+    object.side = THREE.DoubleSide;
     bike = object;
     scene.add(object);
   });
 
   window.addEventListener('resize', resize, false);
   setTimeout(resize, 1);
+}
+
+function addCylinder(radiusTop, radiusBottom, height, radiusSegments, color) {
+  var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments);
+  var material = new THREE.MeshNormalMaterial();
+  return new THREE.Mesh(geometry, material);
 }
 
 function resize() {
@@ -112,7 +126,7 @@ var i = 0;
 function update(dt) {
   resize();
   if (bike) {
-    i = ((i + 0.5) % 360);
+    i = ((i + 0.1) % 360);
     bike.rotation.y = i * (Math.PI / 180);
   }
 
