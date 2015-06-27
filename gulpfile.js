@@ -10,6 +10,7 @@ var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var foreach = require('gulp-foreach');
+var ghPages = require('gulp-gh-pages');
 
 var examples = [
   // "bike_rotating",
@@ -26,7 +27,7 @@ gulp.task('dev', ['build'], server);
 
 gulp.task('build', ['sass', 'assets', 'scripts']);
 gulp.task('default', ['build']);
-
+gulp.task('deploy', ['default'], deployGithubPages);
 
 function sassCompile() {
   return gulp.src('src/main/examples/*')
@@ -82,6 +83,12 @@ function server() {
   gulp.watch(['src/main/**', 'src/main/**/js/**', 'src/main/**/scss/**/*.scss'], {}, ['reloader']);
 
 }
+
+function deployGithubPages() {
+  return gulp.src('./out/**')
+    .pipe(ghPages());
+}
+
 
 function clean(cb) {
   del(['out/'], cb);
